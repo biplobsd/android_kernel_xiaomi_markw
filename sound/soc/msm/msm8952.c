@@ -122,14 +122,15 @@ static struct wcd_mbhc_config mbhc_cfg = {
 	.key_code[7] = 0,
 #endif
 #else
+	.key_code[0] = KEY_MEDIA,
 	.key_code[1] = KEY_VOICECOMMAND,
 	.key_code[2] = KEY_VOLUMEUP,
 	.key_code[3] = KEY_VOLUMEDOWN,
-#endif
 	.key_code[4] = 0,
 	.key_code[5] = 0,
 	.key_code[6] = 0,
 	.key_code[7] = 0,
+#endif
 	.linein_th = 5000,
 };
 
@@ -322,6 +323,9 @@ static int enable_spk_ext_pa(struct snd_soc_codec *codec, int enable)
 			udelay(2);
 			pa_mode--;
 		}
+	} else {
+		gpio_set_value_cansleep(pdata->spk_ext_pa_gpio, enable);
+	}
 #else
 		ret = msm_gpioset_activate(CLIENT_WCD_INT, "ext_spk_gpio");
 		if (ret) {
@@ -330,18 +334,16 @@ static int enable_spk_ext_pa(struct snd_soc_codec *codec, int enable)
 			return ret;
 		}
 		gpio_set_value_cansleep(pdata->spk_ext_pa_gpio, enable);
-#endif
 	} else {
 		gpio_set_value_cansleep(pdata->spk_ext_pa_gpio, enable);
-#ifndef CONFIG_MACH_XIAOMI_C6
 		ret = msm_gpioset_suspend(CLIENT_WCD_INT, "ext_spk_gpio");
 		if (ret) {
 			pr_err("%s: gpio set cannot be de-activated %s\n",
 					__func__, "ext_spk_gpio");
 			return ret;
 		}
-#endif
 	}
+#endif
 	return 0;
 }
 
@@ -1654,7 +1656,7 @@ static void *def_msm8952_wcd_mbhc_cal(void)
 		return NULL;
 
 #define S(X, Y) ((WCD_MBHC_CAL_PLUG_TYPE_PTR(msm8952_wcd_cal)->X) = (Y))
-#if defined(CONFIG_MACH_XIAOMI_C6) || defined(CONFIG_MACH_XIAOMI_MARKW)
+#ifdef CONFIG_MACH_XIAOMI_C6
 	S(v_hs_max, 1600);
 #else
 	S(v_hs_max, 1500);

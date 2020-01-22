@@ -81,11 +81,10 @@ static void wcd_mbhc_jack_report(struct wcd_mbhc *mbhc,
 				struct snd_soc_jack *jack, int status, int mask)
 {
 #ifdef CONFIG_MACH_XIAOMI_C6
-	if (jack->jack->type & WCD_MBHC_JACK_MASK) {
-		if (!status)
-			switch_set_state(&accdet_data, 0);
-		else
-			switch_set_state(&accdet_data, status);
+	if (!status && (jack->jack->type&WCD_MBHC_JACK_MASK)) {
+		switch_set_state(&accdet_data, 0);
+	} else if (jack->jack->type&WCD_MBHC_JACK_MASK) {
+		switch_set_state(&accdet_data, status);
 	}
 #endif
 	snd_soc_jack_report(jack, status, mask);
@@ -2500,7 +2499,6 @@ int wcd_mbhc_init(struct wcd_mbhc *mbhc, struct snd_soc_codec *codec,
 		return -EPERM;
 	}
 #endif
-
 	ret = of_property_read_u32(card->dev->of_node, hph_switch, &hph_swh);
 	if (ret) {
 		dev_err(card->dev,
