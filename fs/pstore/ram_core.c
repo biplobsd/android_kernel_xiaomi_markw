@@ -314,7 +314,7 @@ static void notrace persistent_ram_update(struct persistent_ram_zone *prz,
 	const void *s, unsigned int start, unsigned int count)
 {
 	struct persistent_ram_buffer *buffer = prz->buffer;
-#if (defined CONFIG_MACH_XIAOMI_C6) || (defined CONFIG_MACH_XIAOMI_D2)
+#if (defined CONFIG_MACH_XIAOMI_C6) || (defined CONFIG_MACH_XIAOMI_MARKW)
 	memcpy_pstore(buffer->data + start, s, count);
 #else
 	memcpy(buffer->data + start, s, count);
