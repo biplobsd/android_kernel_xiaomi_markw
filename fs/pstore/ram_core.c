@@ -298,7 +298,7 @@ ssize_t persistent_ram_ecc_string(struct persistent_ram_zone *prz,
 	return ret;
 }
 
-#if (defined CONFIG_MACH_XIAOMI_C6) || (defined CONFIG_MACH_XIAOMI_D2)
+#if (defined CONFIG_MACH_XIAOMI_C6) || (defined CONFIG_MACH_XIAOMI_MARKW)
 static void *memcpy_pstore(void *dest, const void *src, size_t count)
 {
 	char *tmp = dest;

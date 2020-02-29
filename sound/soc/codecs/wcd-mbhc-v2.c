@@ -77,6 +77,7 @@ enum wcd_mbhc_cs_mb_en_flag {
 #ifdef CONFIG_MACH_XIAOMI_C6
 static struct switch_dev accdet_data;
 #endif
+
 static void wcd_mbhc_jack_report(struct wcd_mbhc *mbhc,
 				struct snd_soc_jack *jack, int status, int mask)
 {
@@ -380,6 +381,7 @@ out_micb_en:
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
 #else
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
+#endif
 		mutex_unlock(&mbhc->hphl_pa_lock);
 		break;
 	case WCD_EVENT_PRE_HPHR_PA_OFF:
@@ -400,6 +402,7 @@ out_micb_en:
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
 #else
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
+#endif
 		mutex_unlock(&mbhc->hphr_pa_lock);
 		break;
 	case WCD_EVENT_PRE_HPHL_PA_ON:
@@ -2491,7 +2494,6 @@ int wcd_mbhc_init(struct wcd_mbhc *mbhc, struct snd_soc_codec *codec,
 	accdet_data.name = "h2w";
 	accdet_data.index = 0;
 	accdet_data.state = 0;
-
 	ret = switch_dev_register(&accdet_data);
 	if (ret) {
 		dev_err(card->dev,
