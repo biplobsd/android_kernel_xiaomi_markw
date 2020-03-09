@@ -1262,7 +1262,7 @@ int msm_cam_sensor_handle_reg_gpio(int seq_val,
 	CDBG("%s: %d GPIO offset: %d, seq_val: %d\n", __func__, __LINE__,
 		gpio_offset, seq_val);
 
-	if ((gconf->gpio_num_info->valid[gpio_offset] == 1)) {
+	if (gconf->gpio_num_info->valid[gpio_offset] == 1) {
 		gpio_set_value_cansleep(
 			gconf->gpio_num_info->gpio_num
 			[gpio_offset], val);
@@ -1664,4 +1664,3 @@ int msm_camera_power_down(struct msm_camera_power_ctrl_t *ctrl,
 	CDBG("%s exit\n", __func__);
 	return 0;
 }
-
